@@ -4,7 +4,7 @@ SignifyX is an AI-powered web-based Sign Language Detection system designed to i
 
 The system follows a MERN-based architecture with a Python ML service, where the frontend captures gestures, the backend handles requests, and the machine learning model performs gesture recognition.
 
-Features
+Features : 
 
 Real-time hand gesture detection
 AI-powered sign language recognition
@@ -13,14 +13,14 @@ Multilingual output support (Marathi, Hindi, English)
 Text and voice feedback
 Helps enable two-way communication
 
-Tech Stack
+Tech Stack : 
 Frontend
 React.js
 JavaScript
 HTML
 CSS
 
-Backend
+Backend : 
 Node.js
 Express.js
 Machine Learning
@@ -28,7 +28,7 @@ Python
 MediaPipe
 TensorFlow / Deep Learning model
 
-Tools
+Tools : 
 Git
 GitHub
 VS Code
