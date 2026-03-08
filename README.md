@@ -7,46 +7,28 @@ The system follows a MERN-based architecture with a Python ML service, where the
 Features
 
 Real-time hand gesture detection
-
 AI-powered sign language recognition
-
 Webcam-based gesture capture
-
 Multilingual output support (Marathi, Hindi, English)
-
 Text and voice feedback
-
 Helps enable two-way communication
 
 Tech Stack
 Frontend
-
 React.js
-
 JavaScript
-
 HTML
-
 CSS
 
 Backend
-
 Node.js
-
 Express.js
-
 Machine Learning
-
 Python
-
 MediaPipe
-
 TensorFlow / Deep Learning model
 
 Tools
-
 Git
-
 GitHub
-
 VS Code
