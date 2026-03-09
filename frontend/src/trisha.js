@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 function Register({ onRegister, onSwitchToLogin }) {
@@ -6,16 +5,6 @@ function Register({ onRegister, onSwitchToLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [preferences, setPreferences] = useState({
-    language: "en",
-    notifications: true,
-    theme: "light",
-    preferredSignLanguage: "asl"
-  });
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
@@ -44,25 +33,8 @@ function Register({ onRegister, onSwitchToLogin }) {
     } else if (password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-    if (phone && !/^\d{10,15}$/.test(phone.replace(/\D/g, ''))) {
-      newErrors.phone = "Please enter a valid phone number";
-    }
-    if (!agreedToTerms) {
-      newErrors.terms = "You must agree to the Terms of Service and Privacy Policy";
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleProfilePicChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePic(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -81,15 +53,7 @@ function Register({ onRegister, onSwitchToLogin }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
-          name, 
-          email, 
-          password,
-          phone,
-          dateOfBirth,
-          profilePic,
-          preferences
-        }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
@@ -189,29 +153,8 @@ function Register({ onRegister, onSwitchToLogin }) {
           )}
           
           <form onSubmit={handleSubmit} style={styles.form}>
-            {/* Profile Picture */}
-            <div style={styles.profilePicSection}>
-              <div style={styles.profilePicPreview}>
-                {profilePic ? (
-                  <img src={profilePic} alt="Profile" style={styles.profilePicImage} />
-                ) : (
-                  <span style={styles.profilePicPlaceholder}>📷</span>
-                )}
-              </div>
-              <label style={styles.profilePicLabel}>
-                Upload Photo
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleProfilePicChange}
-                  style={styles.profilePicInput}
-                />
-              </label>
-            </div>
-
-            {/* Full Name */}
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Full Name *</label>
+              <label style={styles.label}>Full Name</label>
               <input
                 type="text"
                 value={name}
@@ -229,9 +172,8 @@ function Register({ onRegister, onSwitchToLogin }) {
               {errors.name && <span style={styles.errorText}>{errors.name}</span>}
             </div>
             
-            {/* Email */}
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Email Address *</label>
+              <label style={styles.label}>Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -249,46 +191,8 @@ function Register({ onRegister, onSwitchToLogin }) {
               {errors.email && <span style={styles.errorText}>{errors.email}</span>}
             </div>
             
-            {/* Phone Number */}
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Phone Number</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                onFocus={() => setFocusedField('phone')}
-                onBlur={() => setFocusedField(null)}
-                placeholder="Enter your phone number"
-                style={{
-                  ...styles.input,
-                  ...(focusedField === 'phone' ? styles.inputFocused : {}),
-                  ...(errors.phone ? styles.inputError : {})
-                }}
-                disabled={loading}
-              />
-              {errors.phone && <span style={styles.errorText}>{errors.phone}</span>}
-            </div>
-
-            {/* Date of Birth */}
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Date of Birth</label>
-              <input
-                type="date"
-                value={dateOfBirth}
-                onChange={(e) => setDateOfBirth(e.target.value)}
-                onFocus={() => setFocusedField('dob')}
-                onBlur={() => setFocusedField(null)}
-                style={{
-                  ...styles.input,
-                  ...(focusedField === 'dob' ? styles.inputFocused : {})
-                }}
-                disabled={loading}
-              />
-            </div>
-            
-            {/* Password */}
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Password *</label>
+              <label style={styles.label}>Password</label>
               <input
                 type="password"
                 value={password}
@@ -306,9 +210,8 @@ function Register({ onRegister, onSwitchToLogin }) {
               {errors.password && <span style={styles.errorText}>{errors.password}</span>}
             </div>
             
-            {/* Confirm Password */}
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Confirm Password *</label>
+              <label style={styles.label}>Confirm Password</label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -324,50 +227,6 @@ function Register({ onRegister, onSwitchToLogin }) {
                 disabled={loading}
               />
               {errors.confirmPassword && <span style={styles.errorText}>{errors.confirmPassword}</span>}
-            </div>
-
-            {/* Preferred Sign Language */}
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Preferred Sign Language</label>
-              <select
-                value={preferences.preferredSignLanguage}
-                onChange={(e) => setPreferences({...preferences, preferredSignLanguage: e.target.value})}
-                style={styles.select}
-                disabled={loading}
-              >
-                <option value="asl">American Sign Language (ASL)</option>
-                <option value="bsl">British Sign Language (BSL)</option>
-                <option value="isl">Indian Sign Language (ISL)</option>
-              </select>
-            </div>
-
-            {/* Social Login Buttons */}
-            <div style={styles.socialSection}>
-              <p style={styles.socialLabel}>Or continue with</p>
-              <div style={styles.socialButtons}>
-                <button type="button" style={styles.socialButtonGoogle}>
-                  <span>🔵</span> Google
-                </button>
-                <button type="button" style={styles.socialButtonGithub}>
-                  <span>⚫</span> GitHub
-                </button>
-              </div>
-            </div>
-            
-            {/* Terms Checkbox */}
-            <div style={styles.checkboxGroup}>
-              <label style={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  checked={agreedToTerms}
-                  onChange={(e) => setAgreedToTerms(e.target.checked)}
-                  style={styles.checkbox}
-                />
-                <span style={styles.checkboxText}>
-                  I agree to the <a href="#" style={styles.link}>Terms of Service</a> and <a href="#" style={styles.link}>Privacy Policy</a>
-                </span>
-              </label>
-              {errors.terms && <span style={styles.errorText}>{errors.terms}</span>}
             </div>
             
             <button 
@@ -488,20 +347,19 @@ const styles = {
     margin: 0,
   },
   rightSection: {
-    flex: 0.9,
+    flex: 0.8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "30px",
+    padding: "40px",
     backgroundColor: "#ffffff",
-    overflowY: "auto",
   },
   formCard: {
     width: "100%",
-    maxWidth: "420px",
+    maxWidth: "400px",
   },
   formHeader: {
-    marginBottom: "25px",
+    marginBottom: "30px",
     textAlign: "center",
   },
   formTitle: {
@@ -515,41 +373,6 @@ const styles = {
     color: "#64748b",
     margin: 0,
   },
-  profilePicSection: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  profilePicPreview: {
-    width: "80px",
-    height: "80px",
-    borderRadius: "50%",
-    background: "linear-gradient(135deg, #1e3a5f 0%, #0d1b2a 100%)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "10px",
-    overflow: "hidden",
-  },
-  profilePicImage: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-  profilePicPlaceholder: {
-    fontSize: "32px",
-  },
-  profilePicLabel: {
-    fontSize: "13px",
-    color: "#1e3a5f",
-    cursor: "pointer",
-    fontWeight: "600",
-    textDecoration: "underline",
-  },
-  profilePicInput: {
-    display: "none",
-  },
   errorBox: {
     display: "flex",
     alignItems: "center",
@@ -558,7 +381,7 @@ const styles = {
     color: "#dc2626",
     padding: "14px 18px",
     borderRadius: "10px",
-    marginBottom: "20px",
+    marginBottom: "24px",
     fontSize: "14px",
     border: "1px solid #fecaca",
   },
@@ -570,7 +393,7 @@ const styles = {
     color: "#059669",
     padding: "14px 18px",
     borderRadius: "10px",
-    marginBottom: "20px",
+    marginBottom: "24px",
     fontSize: "14px",
     border: "1px solid #a7f3d0",
   },
@@ -583,38 +406,27 @@ const styles = {
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "14px",
+    gap: "18px",
   },
   inputGroup: {
     display: "flex",
     flexDirection: "column",
-    gap: "6px",
+    gap: "8px",
   },
   label: {
-    fontSize: "13px",
+    fontSize: "14px",
     fontWeight: "600",
     color: "#374151",
   },
   input: {
     width: "100%",
-    padding: "12px 14px",
-    fontSize: "14px",
+    padding: "14px 16px",
+    fontSize: "15px",
     border: "2px solid #e2e8f0",
     borderRadius: "10px",
     outline: "none",
     transition: "all 0.2s ease",
     backgroundColor: "#f8fafc",
-    boxSizing: "border-box",
-  },
-  select: {
-    width: "100%",
-    padding: "12px 14px",
-    fontSize: "14px",
-    border: "2px solid #e2e8f0",
-    borderRadius: "10px",
-    outline: "none",
-    backgroundColor: "#f8fafc",
-    cursor: "pointer",
     boxSizing: "border-box",
   },
   inputFocused: {
@@ -628,82 +440,12 @@ const styles = {
   },
   errorText: {
     color: "#dc2626",
-    fontSize: "12px",
-  },
-  socialSection: {
-    marginTop: "5px",
-  },
-  socialLabel: {
     fontSize: "13px",
-    color: "#64748b",
-    textAlign: "center",
-    marginBottom: "12px",
-  },
-  socialButtons: {
-    display: "flex",
-    gap: "10px",
-  },
-  socialButtonGoogle: {
-    flex: 1,
-    padding: "10px",
-    fontSize: "13px",
-    fontWeight: "600",
-    color: "#333",
-    backgroundColor: "#ffffff",
-    border: "2px solid #e2e8f0",
-    borderRadius: "10px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "8px",
-    transition: "all 0.2s ease",
-  },
-  socialButtonGithub: {
-    flex: 1,
-    padding: "10px",
-    fontSize: "13px",
-    fontWeight: "600",
-    color: "#fff",
-    backgroundColor: "#333",
-    border: "2px solid #333",
-    borderRadius: "10px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "8px",
-    transition: "all 0.2s ease",
-  },
-  checkboxGroup: {
-    marginTop: "5px",
-  },
-  checkboxLabel: {
-    display: "flex",
-    alignItems: "flex-start",
-    gap: "10px",
-    cursor: "pointer",
-  },
-  checkbox: {
-    width: "18px",
-    height: "18px",
-    marginTop: "2px",
-    cursor: "pointer",
-  },
-  checkboxText: {
-    fontSize: "12px",
-    color: "#64748b",
-    lineHeight: "1.4",
-  },
-  link: {
-    color: "#1e3a5f",
-    textDecoration: "none",
-    fontWeight: "600",
   },
   button: {
     width: "100%",
-    padding: "14px",
-    fontSize: "15px",
+    padding: "16px",
+    fontSize: "16px",
     fontWeight: "600",
     color: "white",
     background: "linear-gradient(135deg, #1e3a5f 0%, #0d1b2a 100%)",
@@ -715,12 +457,18 @@ const styles = {
   },
   footer: {
     textAlign: "center",
-    marginTop: "22px",
+    marginTop: "28px",
   },
   footerText: {
     color: "#64748b",
     fontSize: "14px",
     margin: 0,
+  },
+  link: {
+    color: "#1e3a5f",
+    cursor: "pointer",
+    fontWeight: "600",
+    textDecoration: "none",
   },
 };
 

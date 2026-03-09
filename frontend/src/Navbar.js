@@ -1,10 +1,10 @@
 
-
 import React, { useState, useEffect } from "react";
 
-function Navbar() {
+function Navbar({ user, onLogout }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -13,7 +13,6 @@ function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
 
- 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -34,7 +33,40 @@ function Navbar() {
           </div>
           <h1 style={styles.brandName}>SignifyX</h1>
         </div>
+        
         <div style={styles.tagline}>Sign Language Detection System</div>
+
+        {user && (
+          <div style={styles.userSection}>
+            <button 
+              style={styles.userButton}
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <div style={styles.avatar}>
+                {user.profilePic ? (
+                  <img src={user.profilePic} alt="Profile" style={styles.avatarImage} />
+                ) : (
+                  <span style={styles.avatarInitial}>{user.name?.charAt(0).toUpperCase()}</span>
+                )}
+              </div>
+              <span style={styles.userName}>{user.name}</span>
+              <span style={styles.dropdownArrow}>▼</span>
+            </button>
+            
+            {showDropdown && (
+              <div style={styles.dropdown}>
+                <div style={styles.dropdownHeader}>
+                  <span style={styles.dropdownName}>{user.name}</span>
+                  <span style={styles.dropdownEmail}>{user.email}</span>
+                </div>
+                <div style={styles.dropdownDivider}></div>
+                <button style={styles.dropdownItem} onClick={onLogout}>
+                  🚪 Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -112,8 +144,94 @@ const styles = {
     fontWeight: "500",
     letterSpacing: "0.5px",
   },
+  userSection: {
+    position: "relative",
+  },
+  userButton: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "6px 12px",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: "25px",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+  },
+  avatar: {
+    width: "32px",
+    height: "32px",
+    borderRadius: "50%",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  avatarInitial: {
+    color: "white",
+    fontSize: "14px",
+    fontWeight: "700",
+  },
+  userName: {
+    color: "white",
+    fontSize: "14px",
+    fontWeight: "600",
+  },
+  dropdownArrow: {
+    color: "rgba(255, 255, 255, 0.7)",
+    fontSize: "10px",
+  },
+  dropdown: {
+    position: "absolute",
+    top: "100%",
+    right: 0,
+    marginTop: "10px",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
+    minWidth: "200px",
+    overflow: "hidden",
+    zIndex: 1001,
+  },
+  dropdownHeader: {
+    padding: "15px",
+    backgroundColor: "#f8fafc",
+  },
+  dropdownName: {
+    display: "block",
+    fontSize: "14px",
+    fontWeight: "700",
+    color: "#1e293b",
+  },
+  dropdownEmail: {
+    display: "block",
+    fontSize: "12px",
+    color: "#64748b",
+    marginTop: "2px",
+  },
+  dropdownDivider: {
+    height: "1px",
+    backgroundColor: "#e2e8f0",
+  },
+  dropdownItem: {
+    display: "block",
+    width: "100%",
+    padding: "12px 15px",
+    fontSize: "14px",
+    color: "#dc2626",
+    backgroundColor: "transparent",
+    border: "none",
+    cursor: "pointer",
+    textAlign: "left",
+    transition: "all 0.2s ease",
+  },
 };
 
 export default Navbar;
-
 
