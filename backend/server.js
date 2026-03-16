@@ -10,23 +10,12 @@ const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
-app.get("/gesture", async (req, res) => {
-  try {
-    const response = await axios.get("http://127.0.0.1:5000/predict");
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).send("ML service error");
-  }
-});
 
-app.use(cors());
-app.use(express.json({ limit: "10mb" }));
 
-// Test route
 const PORT = 3001;
 const JWT_SECRET = "signifyx_secret_key_2024"; // In production, use environment variable
 
-// Middleware
+// Middleware (consolidated)
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
