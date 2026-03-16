@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kuldeepkolage/signifyx_sign_language_detection_system#readme",
   "dependencies": {
+    "axios": "^1.13.6",
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "express": "^5.2.1"
