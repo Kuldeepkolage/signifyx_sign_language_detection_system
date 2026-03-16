@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./Navbar";
@@ -9,6 +8,7 @@ import Settings from "./Settings";
 import History from "./History";
 import Analytics from "./Analytics";
 import Practice from "./Practice";
+import Gesture from "./gesture";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,9 +17,9 @@ function App() {
   const [activeTab, setActiveTab] = useState("camera");
 
   useEffect(() => {
-    // Check if user is already logged in
     const token = localStorage.getItem("token");
     const savedUser = localStorage.getItem("user");
+
     if (token && savedUser) {
       setIsLoggedIn(true);
       setUser(JSON.parse(savedUser));
@@ -46,7 +46,6 @@ function App() {
   };
 
   const handleLogout = () => {
-    // Clear localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);
@@ -59,9 +58,8 @@ function App() {
     setUser(updatedUser);
   };
 
-  // Render main app with tabs
   const renderMainContent = () => {
-    switch(activeTab) {
+    switch (activeTab) {
       case "camera":
         return <Camera user={user} />;
       case "practice":
@@ -71,13 +69,18 @@ function App() {
       case "analytics":
         return <Analytics />;
       case "settings":
-        return <Settings user={user} onUpdateUser={handleUpdateUser} onLogout={handleLogout} />;
+        return (
+          <Settings
+            user={user}
+            onUpdateUser={handleUpdateUser}
+            onLogout={handleLogout}
+          />
+        );
       default:
         return <Camera user={user} />;
     }
   };
 
-  // Tab navigation buttons
   const renderTabs = () => {
     const tabs = [
       { id: "camera", label: "📹 Camera", icon: "📹" },
@@ -85,6 +88,7 @@ function App() {
       { id: "history", label: "📜 History", icon: "📜" },
       { id: "analytics", label: "📊 Analytics", icon: "📊" },
       { id: "settings", label: "⚙️ Settings", icon: "⚙️" },
+      { id: "gesture", label: "🤟 Gesture", icon: "🤟" },
     ];
 
     return (
@@ -95,7 +99,7 @@ function App() {
             onClick={() => setActiveTab(tab.id)}
             style={{
               ...styles.tabButton,
-              ...(activeTab === tab.id ? styles.tabButtonActive : {})
+              ...(activeTab === tab.id ? styles.tabButtonActive : {}),
             }}
           >
             <span style={styles.tabIcon}>{tab.icon}</span>
@@ -109,28 +113,37 @@ function App() {
   return (
     <div className="App">
       <Navbar user={user} onLogout={handleLogout} />
+
       <div className="main-content">
         {currentView === "login" && !isLoggedIn && (
-          <Login 
-            onLogin={handleLogin} 
-            onSwitchToRegister={handleSwitchToRegister} 
+          <Login
+            onLogin={handleLogin}
+            onSwitchToRegister={handleSwitchToRegister}
           />
         )}
+
         {currentView === "register" && !isLoggedIn && (
-          <Register 
-            onRegister={handleRegister} 
-            onSwitchToLogin={handleSwitchToLogin} 
+          <Register
+            onRegister={handleRegister}
+            onSwitchToLogin={handleSwitchToLogin}
           />
         )}
+
         {currentView === "main" && isLoggedIn && (
           <div style={styles.mainContainer}>
             <div style={styles.welcomeSection}>
               <h2>Welcome, {user?.name}! 👋</h2>
               <p>Choose a feature to get started</p>
             </div>
+
             {renderTabs()}
+
             <div style={styles.contentArea}>
-              {renderMainContent()}
+              {activeTab === "gesture" ? (
+                <Gesture />
+              ) : (
+                renderMainContent()
+              )}
             </div>
           </div>
         )}
@@ -195,4 +208,3 @@ const styles = {
 };
 
 export default App;
-
