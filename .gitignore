@@ -18,6 +18,7 @@ __pycache__/
 .svn/
 .swiftpm/
 migrate_working_dir/
+backup_old_project/
 
 # IntelliJ related
 *.iml
