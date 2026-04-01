@@ -63,7 +63,6 @@ def plot_confusion_matrix(cm,
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
-
     thresh = cm.max() / 1.5 if normalize else cm.max() / 2
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         if normalize:
@@ -75,12 +74,10 @@ def plot_confusion_matrix(cm,
                      horizontalalignment="center",
                      color="white" if cm[i, j] > thresh else "black")
 
-
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
     plt.savefig('confusion_matrix.png')
-
 
 image_x, image_y = 50, 50
 with open("test_images", "rb") as f:
@@ -88,7 +85,6 @@ with open("test_images", "rb") as f:
 with open("test_labels", "rb") as f:
 	test_labels = np.array(pickle.load(f), dtype=np.int32)
 test_images = np.reshape(test_images, (test_images.shape[0], image_x, image_y, 1))
-
 
 model = load_model('cnn_model_keras2.h5')
 pred_labels = []
