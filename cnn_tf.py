@@ -7,18 +7,14 @@ import pickle, os, cv2
 tf.logging.set_verbosity(tf.logging.INFO)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-
 def get_image_size():
 	img = cv2.imread('gestures/0/100.jpg', 0)
 	return img.shape
 
-
 def get_num_of_classes():
 	return len(os.listdir('gestures/'))
 
-
 image_x, image_y = get_image_size()
-
 
 def cnn_model_fn(features, labels, mode):
 	input_layer = tf.reshape(features["x"], [-1, image_x, image_y, 1], name="input")
@@ -94,7 +90,6 @@ def main(argv):
 
 	results = classifier.evaluate(input_fn=eval_input_fn)
 	print(results)
-
 
 if __name__ == "__main__":
 	tf.app.run()
