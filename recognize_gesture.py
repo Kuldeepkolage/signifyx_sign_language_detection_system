@@ -111,6 +111,7 @@ def recognize():
 		thresh = cv2.merge((thresh,thresh,thresh))
 		thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
 		thresh = thresh[y:y+h, x:x+w]
+
 		(openCV_ver,_,__) = cv2.__version__.split(".")
 		if openCV_ver=='3':
 			contours = cv2.findContours(thresh.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)[1]
@@ -133,9 +134,11 @@ def recognize():
 				if pred_probab*100 > 80:
 					text = get_pred_text_from_db(pred_class)
 					print(text)
+					
 		blackboard = np.zeros((480, 640, 3), dtype=np.uint8)
 		splitted_text = split_sentence(text, 2)
 		put_splitted_text_in_blackboard(blackboard, splitted_text)
+		
 		#cv2.putText(blackboard, text, (30, 200), cv2.FONT_HERSHEY_TRIPLEX, 1.3, (255, 255, 255))
 		cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
 		res = np.hstack((img, blackboard))

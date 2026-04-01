@@ -3,6 +3,7 @@ gestures/
 tmp/
 *.h5
 *.ckpt*
+*.pkl
 __pycache__/
 .venv/
 *.class
