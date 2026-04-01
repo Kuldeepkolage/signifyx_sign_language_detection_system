@@ -62,7 +62,7 @@ def train():
 	val_images = np.reshape(val_images, (val_images.shape[0], image_x, image_y, 1))
 	train_labels = np_utils.to_categorical(train_labels)
 	val_labels = np_utils.to_categorical(val_labels)
-
+	
 	print(val_labels.shape)
 
 	model, callbacks_list = cnn_model()
