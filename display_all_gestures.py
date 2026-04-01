@@ -19,9 +19,11 @@ else:
 full_img = None
 for i in range(rows):
 	col_img = None
+
 	for j in range(begin_index, end_index):
 		img_path = "gestures/%s/%d.jpg" % (j, random.randint(1, 1200))
 		img = cv2.imread(img_path, 0)
+
 		if np.any(img == None):
 			img = np.zeros((image_y, image_x), dtype = np.uint8)
 		if np.any(col_img == None):
@@ -35,7 +37,6 @@ for i in range(rows):
 		full_img = col_img
 	else:
 		full_img = np.vstack((full_img, col_img))
-
 
 cv2.imshow("gestures", full_img)
 cv2.imwrite('full_img.jpg', full_img)
