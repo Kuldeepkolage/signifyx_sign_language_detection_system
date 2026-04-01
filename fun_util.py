@@ -239,6 +239,7 @@ def text_mode(cam):
 	text = ""
 	word = ""
 	count_same_frame = 0
+	
 	while True:
 		img = cam.read()[1]
 		img = cv2.resize(img, (640, 480))
@@ -275,8 +276,10 @@ def text_mode(cam):
 				#print('yolo1')
 				#say_text(text)
 				Thread(target=say_text, args=(word, )).start()
+
 			text = ""
 			word = ""
+
 		blackboard = np.zeros((480, 640, 3), dtype=np.uint8)
 		cv2.putText(blackboard, "Text Mode", (180, 50), cv2.FONT_HERSHEY_TRIPLEX, 1.5, (255, 0,0))
 		cv2.putText(blackboard, "Predicted text- " + text, (30, 100), cv2.FONT_HERSHEY_TRIPLEX, 1, (255, 255, 0))
